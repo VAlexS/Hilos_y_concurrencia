@@ -28,6 +28,8 @@ public class EjemploRunnableLambda {
             }
         };*/
 
+        Thread main = Thread.currentThread();
+
         Runnable viaje = () -> {
 
             String nombre = Thread.currentThread().getName();
@@ -46,13 +48,41 @@ public class EjemploRunnableLambda {
                 }
             }
 
-            System.out.println("Finaliza el hilo "+nombre);
+            //System.out.println("Finaliza el hilo "+nombre);
+            System.out.println("Finalmente, me voy de de viaje a "+nombre);
+            System.out.println(main.getState());
         };
 
-        new Thread(viaje, "Isla de Pascua").start();
-        new Thread(viaje, "Robinson Crusoe").start();
-        new Thread(viaje, "Juan Fernandez").start();
-        new Thread(viaje, "Isla de Chiloe").start();
+        Thread v1 = new Thread(viaje, "Isla de Pascua");
+        Thread v2 = new Thread(viaje, "Robinson Crusoe");
+        Thread v3 = new Thread(viaje, "Juan Fernandez");
+        Thread v4 = new Thread(viaje, "Isla de Chiloe");
+
+        v1.start();
+        v2.start();
+        v3.start();
+        v4.start();
+
+        try {
+            v1.join();
+            v2.join();
+            v3.join();
+            v4.join();
+        } catch (InterruptedException e) {
+            System.out.println("El hilo ha sido interrumpido");
+            throw new RuntimeException(e);
+        }
+
+
+        /*try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }*/
+
+        System.out.println("Continua la ejecución del main: "+main.getName());
+
+
 
 
     }
